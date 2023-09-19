@@ -13,15 +13,28 @@ class TestParamsInput(unittest.TestCase):
         self.assertEqual(length, 10)
         self.assertEqual(width, 5)
 
+    @patch('builtins.input', side_effect=['0', '0', '10', '5'])
+    def test_zirrow_input(self, mock_input):
+        with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
+            # Запускаем функцию params_input()
+            length, width = params_input()
+            expected_output = "Вы ввели не положительное число\n"
+
+        # Проверяем, что значения были скорректированы на правильные
+        self.assertEqual(length, 10)
+        self.assertEqual(width, 5)
+
+        # Проверяем, что выводится сообщение об ошибке
+        self.assertEqual(mock_stdout.getvalue(), expected_output)
+
     @patch('builtins.input', side_effect=['-1', '5', '10', 'abc', '5', '7'])
     def test_invalid_input(self, mock_input):
         # Подготавливаем вывод для имитации ввода
-        mock_input.side_effect = ['-1', '5', '10', 'abc', '5', '7']
 
         with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
             # Запускаем функцию params_input()
             length, width = params_input()
-            expected_output = "Вы ввели не натуральное число\nВы ввели не натуральное число\n"
+            expected_output = "Вы ввели не положительное число\nВы ввели не положительное число\n"
 
 
         # Проверяем, что значения были скорректированы на правильные
@@ -37,7 +50,7 @@ class TestCalculateRectangleArea(unittest.TestCase):
         # Проверяем, что функция корректно вычисляет площадь для правильных параметров
         params = (10, 5)
         result = calculate_rectangle_area(params)
-        self.assertEqual(result, 50)
+        self.assertEqual(result, 50.0)
 
 
 class TestResultPrint(unittest.TestCase):
@@ -45,7 +58,25 @@ class TestResultPrint(unittest.TestCase):
     def test_print_result_output(self, mock_input):
         with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
             result = result_print()
-            expected_output = "50\n"
+            expected_output = "50.0\n"
+
+        # Проверяем, что результат соответствует ожидаемому выводу
+        self.assertEqual(mock_stdout.getvalue(), expected_output)
+
+    @patch('builtins.input', side_effect=['0', '0', '10', '5'])
+    def test_print_result_zirrow(self, mock_input):
+        with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
+            result = result_print()
+            expected_output = "Вы ввели не положительное число\n50.0\n"
+
+        # Проверяем, что результат соответствует ожидаемому выводу
+        self.assertEqual(mock_stdout.getvalue(), expected_output)
+
+    @patch('builtins.input', side_effect=['-1', '-1', '10', '5'])
+    def test_print_result_invalid(self, mock_input):
+        with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
+            result = result_print()
+            expected_output = "Вы ввели не положительное число\n50.0\n"
 
         # Проверяем, что результат соответствует ожидаемому выводу
         self.assertEqual(mock_stdout.getvalue(), expected_output)

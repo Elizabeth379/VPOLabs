@@ -5,16 +5,16 @@ def params_input():
     while True:
         try:
 
-            length = int(input("Введите длину"))
-            width = int(input("Введите ширину"))
+            length = float(input("Введите длину"))
+            width = float(input("Введите ширину"))
 
             if length <= 0 or width <= 0:
-                raise ValueError("Длина и ширина прямоугольника должны быть положительными числами.")
+                raise ValueError("Вы ввели не положительное число")
 
             break
 
         except ValueError:
-            print("Вы ввели не натуральное число")
+            print("Вы ввели не положительное число")
 
     return length, width
 
