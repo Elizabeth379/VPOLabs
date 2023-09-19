@@ -1,30 +1,34 @@
 import sys
 
 
-def calculate_rectangle_area(length, width):
-    try:
-        length = float(length)
-        width = float(width)
+def params_input():
+    while True:
+        try:
 
-        if length <= 0 or width <= 0:
-            raise ValueError("Длина и ширина прямоугольника должны быть положительными числами.")
+            length = int(input("Введите длину"))
+            width = int(input("Введите ширину"))
 
-        area = length * width
+            if length <= 0 or width <= 0:
+                raise ValueError("Длина и ширина прямоугольника должны быть положительными числами.")
+
+            break
+
+        except ValueError:
+            print("Вы ввели не натуральное число")
+
+    return length, width
+
+
+
+def calculate_rectangle_area(params):
+        area = params[0] * params[1]
         return area
 
-    except ValueError as e:
-        print(f"Ошибка: {e}")
-        return None
+
+def result_print():
+    print(calculate_rectangle_area(params_input()))
+
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Использование: python calculate_rectangle_area.py <1> <2>")
-    else:
-        length = sys.argv[1]
-        width = sys.argv[2]
-
-        area = calculate_rectangle_area(length, width)
-
-        if area is not None:
-            print(f"Площадь прямоугольника с длиной {length} и шириной {width} равна {area}")
+    result_print()
