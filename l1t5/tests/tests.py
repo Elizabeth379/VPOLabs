@@ -1,5 +1,6 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, mock_open
+from io import StringIO
 import os
 import glob
 from main import search_files_with_extension, searching_time
@@ -27,6 +28,35 @@ class TestFindFilesWithExtension(unittest.TestCase):
 
             # Проверяем, что список найденных файлов совпадает с ожидаемым списком
             self.assertEqual(found_files, expected_files)
+
+
+class TestSearchingTime(unittest.TestCase):
+    @patch('builtins.print')
+    @patch('main.search_files_with_extension', return_value=["file1.py", "file2.py"])
+    def test_searching_time_with_files_found(self, mock_search_files, mock_print):
+        # Вызываем функцию searching_time()
+        searching_time()
+
+        # Проверяем, что функция search_files_with_extension была вызвана
+        mock_search_files.assert_called_once_with("py")
+
+        # Проверяем, что было выведено сообщение о найденных файлах
+        mock_print.assert_any_call("List of found files:\n")
+        mock_print.assert_any_call("file1.py")
+        mock_print.assert_any_call("file2.py")
+
+    @patch('builtins.print')
+    @patch('main.search_files_with_extension', return_value=[])
+    def test_searching_time_with_files_not_found(self, mock_search_files, mock_print):
+        # Вызываем функцию searching_time()
+        searching_time()
+
+        # Проверяем, что функция search_files_with_extension была вызвана
+        mock_search_files.assert_called_once_with("py")
+
+        # Проверяем, что было выведено сообщение о том, что файлы не найдены
+        mock_print.assert_called_once_with("Files with extension .py not found.")
+
 
 
 if __name__ == '__main__':

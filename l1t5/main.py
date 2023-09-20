@@ -8,7 +8,7 @@ def search_files_with_extension(extension):
     return glob.glob(search_pattern, recursive=True)
 
 def searching_time():
-    file_extension = "py"
+    file_extension = "txt"
     files = search_files_with_extension(file_extension)
 
     if not files:
