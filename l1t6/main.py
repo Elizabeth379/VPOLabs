@@ -25,7 +25,7 @@ def download_and_save(url, save_directory):
     except requests.exceptions.RequestException as e:
         print(f"Ошибка при получении данных из URL: {e}")
 
-def start_dowloading():
+def start_downloading():
     # Задайте URL и директорию здесь
     url = "https://i.pinimg.com/564x/db/22/b0/db22b02f2f9d740d35fad1e922e9f748.jpg"
     save_directory = "C:/projects/vpo/l1t6"
@@ -33,5 +33,5 @@ def start_dowloading():
     download_and_save(url, save_directory)
 
 if __name__ == "__main__":
-    start_dowloading()
+    start_downloading()
 
